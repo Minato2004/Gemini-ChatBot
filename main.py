@@ -13,11 +13,11 @@ st.set_page_config(
     layout="centered"
 )
 
-apiKey=os.getenv("GOOGLE_API_KEY")
+apiKey = os.getenv("GOOGLE_API_KEY")
 
 
 gen_ai.configure(api_key=apiKey)
-model=gen_ai.GenerativeModel('gemini-1.5-pro')
+model = gen_ai.GenerativeModel('gemini-1.5-pro')
 
 
 def translate(user):
@@ -27,17 +27,16 @@ def translate(user):
         return user
 
 if "chat_session" not in st.session_state:
-    st.session_state.chat_session=model.start_chat(history=[])
+    st.session_state.chat_session = model.start_chat(history=[])
 
 st.title("🤖 Sheldon ChatBot")
-
 for message in st.session_state.chat_session.history:
     with st.chat_message(translate(message.role)):
         st.markdown(message.parts[0].text)
 
-user_prompt = st.chat_input("Ask Gemini...")
+user_prompt = st.chat_input("Ask Sheldon...")
 if user_prompt:
     st.chat_message("user").markdown(user_prompt)
-    gemini_response = st.session_state.chat_session.send_message(user_prompt)
+    gemini_response = st.session_state.chat_session.send_message("Answer this as sheldon cooper"+" "+user_prompt)
     with st.chat_message("assistant"):
         st.markdown(gemini_response.text)
